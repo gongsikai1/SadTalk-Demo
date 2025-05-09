@@ -18,7 +18,14 @@ def load_video_to_cv2(input_path):
     return full_frames
 
 def save_video_with_watermark(video, audio, save_path, watermark=False):
-    temp_file = str(uuid.uuid4())+'.mp4'
+    
+    if os.path.abspath(video) == os.path.abspath(save_path):
+        raise ValueError("Input and output paths cannot be the same")
+    
+    # 确保临时文件后缀与目标文件一致
+    temp_ext = os.path.splitext(save_path)[1]
+    temp_file = f"{uuid.uuid4()}{temp_ext}"
+    # temp_file = str(uuid.uuid4())+'.mp4'
     cmd = r'ffmpeg -y -hide_banner -loglevel error -i "%s" -i "%s" -vcodec copy "%s"' % (video, audio, temp_file)
     os.system(cmd)
 

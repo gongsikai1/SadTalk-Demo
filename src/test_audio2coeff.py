@@ -75,7 +75,7 @@ class Audio2Coeff():
     def generate(self, batch, coeff_save_dir, pose_style, ref_pose_coeff_path=None):
 
         with torch.no_grad():            
-            timestamp = int(time.time() * 1000)
+            #timestamp = int(time.time() * 1000)
             #test
             results_dict_exp= self.audio2exp_model.test(batch)
             exp_pred = results_dict_exp['exp_coeff_pred']                         #bs T 64
@@ -101,13 +101,13 @@ class Audio2Coeff():
             if ref_pose_coeff_path is not None: 
                  coeffs_pred_numpy = self.using_refpose(coeffs_pred_numpy, ref_pose_coeff_path)
         
-            save_path = os.path.join(coeff_save_dir, '%s##%s.mat'%(batch['pic_name'], batch['audio_name']))
+            #save_path = os.path.join(coeff_save_dir, '%s##%s.mat'%(batch['pic_name'], batch['audio_name']))
 
-            #savemat(os.path.join(coeff_save_dir, '%s##%s.mat'%(batch['pic_name'], batch['audio_name'])), {'coeff_3dmm': coeffs_pred_numpy})
-            savemat(save_path, {'coeff_3dmm': coeffs_pred_numpy})
+            savemat(os.path.join(coeff_save_dir, '%s###%s.mat'%(batch['pic_name'], batch['audio_name'])), {'coeff_3dmm': coeffs_pred_numpy})
+            #savemat(save_path, {'coeff_3dmm': coeffs_pred_numpy})
 
-            #return os.path.join(coeff_save_dir, '%s##%s.mat'%(batch['pic_name'], batch['audio_name']))
-            return os.path.join(coeff_save_dir, f'{batch["pic_name"]}##{batch["audio_name"]}_{timestamp}.mat')
+            return os.path.join(coeff_save_dir, '%s###%s.mat'%(batch['pic_name'], batch['audio_name']))
+            #return os.path.join(coeff_save_dir, f'{batch["pic_name"]}##{batch["audio_name"]}_{timestamp}.mat')
     
     def using_refpose(self, coeffs_pred_numpy, ref_pose_coeff_path):
         num_frames = coeffs_pred_numpy.shape[0]
